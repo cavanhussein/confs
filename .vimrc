@@ -1,24 +1,22 @@
-set nocompatible              " be iMproved, required
-filetype off
-"
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'vim-airline/vim-airline'
-Plugin 'whatyouhide/vim-gotham'
-Plugin 'justinmk/vim-sneak'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'nvie/vim-flake8'
-
-call vundle#end()
-
 filetype plugin indent on
 
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'vim-airline/vim-airline'
+Plug 'whatyouhide/vim-gotham'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scrooloose/nerdtree'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'w0rp/ale'
+call plug#end()
+
+set hidden
 set smarttab
 set tabstop=4
 set shiftwidth=4
@@ -26,21 +24,18 @@ set expandtab
 set smartindent
 set showcmd
 set ruler
-set nu
 set t_Co=256
-set relativenumber
+set nu
+set rnu
 set number
+set hlsearch
 
-let python_highlight_all=1
-syntax on
+colorscheme gotham256
 
 let mapleader = "\<Space>"
 
-"git commit message configuration.
+"git commit message configuration
 autocmd Filetype gitcommit setlocal spell textwidth=72
-
-"no expandtab for Makefiles
-autocmd BufNewFile,BufRead makefile,Makefile set noexpandtab
 
 "Extra white space checker
 highlight UnwanttedTab ctermbg=red guibg=darkred
@@ -51,35 +46,27 @@ match TrailSpace / \+$/
 autocmd ColorScheme * highlight UnwanttedTab ctermbg=red guibg=red
 autocmd ColorScheme * highlight TrailSpace guibg=red ctermbg=red
 
-colorscheme gotham256
-
-"excute pathogen plugin manager
-"execute pathogen#infect()
-
-"part of vim airline
-"set nocompatible ruler laststatus=2 showcmd showmode number
+"Display status bar
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-
-" This allows buffers to be hidden if you've modified a buffer.
-" This is almost a must if you wish to use buffers in this way.
-set hidden
-
-" To open a new empty buffer
-" This replaces :tabnew which I used to bind to this mapping
+"Navigation and file shortcuts
 nmap <leader>T :enew<cr>
-
-" Move to the next buffer
 nmap <leader>l :bnext<CR>
-
-" Move to the previous buffer
 nmap <leader>h :bprevious<CR>
-
-" Close the current buffer and move to the previous one
-" This replicates the idea of closing a tab
 nmap <leader>bq :bp <BAR> bd #<CR>
-
-" Show all open buffers and their status
 nmap <leader>bl :ls<CR>
+nmap <leader>gd <Plug>(coc-definitions)
+nmap <leader>gr <Plug>(coc-references)
+
+"NERDTree commands.
+map <C-n> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+"Ale commands.
+nmap <silent> <leader>aj <Plug>(ale_previous_wrap)
+nmap <silent> <leader>ak <Plug>(ale_next_wrap)
+
+"fzf git files list.
+nnoremap <C-p> :GFiles<CR>
