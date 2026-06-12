@@ -1,0 +1,38 @@
+set nu
+set rnu
+set number
+
+let mapleader = "\<Space>"
+
+" Map \r to the Reformat Code action
+:map \r <Action>(ReformatCode)
+
+" Map <leader>d to start debug
+:map <leader>d <Action>(Debug)
+
+" Map <leader>r to run most recent test
+:map <leader>r <Action>(Run)
+
+" Map <leader>h to switch to previous tab
+:map <leader>h <Action>(PreviousTab)
+
+" Map <leader>l to switch to next tab
+:map <leader>l <Action>(NextTab)
+
+" Map <leader>bq to close current tab
+:map <leader>bq <Action>(CloseContent)
+
+" Map \p to pin active tab
+:map \p <Action>(PinActiveEditorTab)
+
+" Map <leader>tls to open run config selector
+:map <leader>tls <Action>(RedesignedRunConfigurationSelector)
+
+" Map <leader>e to focus on editor
+:map <leader>e <Action>(FocusEditor)
+
+" Map \b to toggle the breakpoint on the current line
+:map \b <Action>(ToggleLineBreakpoint)
+
+" Map \fs to open file structure menu
+:map \fs <Action>(FileStructurePopup)
